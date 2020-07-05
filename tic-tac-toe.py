@@ -153,7 +153,7 @@ def winscr(move,screen,running):
 
 def movec5(t):
     m=remturn5(t)
-    v,h=random.choice(m)
+    v,h=intcho5(t,m)
     t.append([v,h,"o"])
     return v,h
 
@@ -294,10 +294,28 @@ def remturn3(t):
 
 def movec3(t):
     m=remturn3(t)
-    v,h=random.choice(m)
+    v,h=intcho(t,m)
     t.append([v,h,"o"])
     return v,h
-    
+
+def intcho(t,m):
+    for v,h in m:
+        t.append([v,h,"o"])
+        if win("o",t):
+            t.pop()
+            return v,h
+        t.pop()
+    return random.choice(m)
+   
+def intcho5(t,m):
+    for v,h in m:
+        t.append([v,h,"o"])
+        if win5("o",t):
+            t.pop()
+            return v,h
+        t.pop()
+    return random.choice(m) 
+
 def showx(screen,move,v,h,y0,dy,x0,dx):
     intro = pygame.image.load(f"images/{move}3*3.png")
     screen.blit(intro, (x0+h*dx,y0+v*dy))
