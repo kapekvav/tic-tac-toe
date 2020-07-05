@@ -310,9 +310,34 @@ def show5x5(screen,running):
                             return
                         if win5("o",t):
                             winscr("o",screen,running)
-                            return           
+                            return
+                        if len(t)==25:
+                            draw5(screen,running)
+                            return                          
                 if x>0 and x<96 and y>0 and y<78:
                     return
+
+def draw5(screen,running):
+    image = pygame.image.load("images/5*5draw.png")
+    screen.blit(image, (0,0))
+    pygame.display.flip()
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                return
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                return
+
+def remturn5(t):
+    m=[]
+    for v in [0,1,2]:
+        for h in [0,1,2]:
+            t0=[v,h,"x"]
+            t1=[v,h,"o"]
+            if not (t0 in t or t1 in t):
+                m.append([v,h])
+    return m
 
 def showcurrentturn5(screen,move):
     intro = pygame.image.load(f"images/{move}5*5scm.png")
