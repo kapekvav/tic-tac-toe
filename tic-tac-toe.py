@@ -151,6 +151,11 @@ def winscr(move,screen,running):
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 return
 
+def movec5(t):
+    m=remturn5(t)
+    v,h=random.choice(m)
+    t.append([v,h,"o"])
+    return v,h
 
 def draw3(screen,running):
     image = pygame.image.load("images/3*3draw.png")
@@ -163,6 +168,22 @@ def draw3(screen,running):
                 return
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 return
+ 
+def winscr5(move,screen,running):
+    if move=="o":
+        image = pygame.image.load("images/5*5blue.png")
+    else:
+        image = pygame.image.load("images/5*5red.png")
+    screen.blit(image, (0,0))
+    pygame.display.flip()
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+                return
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                return
+
 def show5x5c(screen,running):
     intro = pygame.image.load("images/5*5.png")
     screen.blit(intro, (0,0))
@@ -191,7 +212,23 @@ def show5x5c(screen,running):
                         if move=="x":
                             move="o"
                         else:
-                            move="x"             
+                            move="x" 
+                        if win5("x",t):
+                            winscr5("x",screen,running)
+                            return
+                        if len(t)==25:
+                            draw5(screen,running)
+                            return           
+                        v,h=movec5(t)
+                        move="o"
+                        showx5(screen,move,v,h,y0,dy,x0,dx) 
+                        move="x"
+                        if win5("o",t):
+                            winscr5("o",screen,running)
+                            return
+                        if len(t)==25:
+                            draw5(screen,running)
+                            return                                    
                 if x>0 and x<96 and y>0 and y<78:
                     return
 
@@ -220,7 +257,7 @@ def show3x3c(screen,running):
                     v=int((y-y0)/dy)
                     h=int((x-x0)/dx)
                     if addturn(t,v,h,move):
-                        showxc(screen,move,v,h,y0,dy,x0,dx)  
+                        showx(screen,move,v,h,y0,dy,x0,dx)  
                         if move=="x":
                             move="o"
                         else:
@@ -233,7 +270,7 @@ def show3x3c(screen,running):
                             return           
                         v,h=movec3(t)
                         move="o"
-                        showxc(screen,move,v,h,y0,dy,x0,dx) 
+                        showx(screen,move,v,h,y0,dy,x0,dx) 
                         move="x"
                         if win("o",t):
                             winscr("o",screen,running)
@@ -261,7 +298,7 @@ def movec3(t):
     t.append([v,h,"o"])
     return v,h
     
-def showxc(screen,move,v,h,y0,dy,x0,dx):
+def showx(screen,move,v,h,y0,dy,x0,dx):
     intro = pygame.image.load(f"images/{move}3*3.png")
     screen.blit(intro, (x0+h*dx,y0+v*dy))
     pygame.display.flip()
@@ -269,11 +306,6 @@ def showxc(screen,move,v,h,y0,dy,x0,dx):
 def showcurrentturn(screen,move):
     intro = pygame.image.load(f"images/{move}3*3scm.png")
     screen.blit(intro, (330,330))
-    pygame.display.flip()
-
-def showx(screen,move,v,h,y0,dy,x0,dx):
-    intro = pygame.image.load(f"images/{move}3*3.png")
-    screen.blit(intro, (x0+h*dx,y0+v*dy))
     pygame.display.flip()
 
 def show5x5(screen,running):
@@ -306,10 +338,10 @@ def show5x5(screen,running):
                         else:
                             move="x"  
                         if win5("x",t):
-                            winscr("x",screen,running)
+                            winscr5("x",screen,running)
                             return
                         if win5("o",t):
-                            winscr("o",screen,running)
+                            winscr5("o",screen,running)
                             return
                         if len(t)==25:
                             draw5(screen,running)
@@ -331,8 +363,8 @@ def draw5(screen,running):
 
 def remturn5(t):
     m=[]
-    for v in [0,1,2]:
-        for h in [0,1,2]:
+    for v in [0,1,2,3,4]:
+        for h in [0,1,2,3,4]:
             t0=[v,h,"x"]
             t1=[v,h,"o"]
             if not (t0 in t or t1 in t):
